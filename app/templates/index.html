@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Monitor</title>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">WebPyDocker</h1>
+                <p class="text-gray-600 mb-2">WebPyDocker is a simple web application that uses Python, Flask, and Docker.</p>
+                <p class="text-gray-600">It is a simple web application that displays the current system health.</p>
+            </div>
+            <button 
+                onclick="window.location.reload()" 
+                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out flex items-center"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                </svg>
+                Refresh
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- System Health Section -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">System Health</h2>
+                <ul class="space-y-2"></ul>
+                    <li class="flex justify-between">
+                        <span class="text-gray-600">CPU Usage:</span>
+                        <span class="font-semibold">{{ system_health.cpu_percent }}%</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span class="text-gray-600">Memory Usage:</span>
+                        <span class="font-semibold">{{ system_health.memory_percent }}%</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span class="text-gray-600">Number of Disks:</span>
+                        <span class="font-semibold">{{ system_health.disk_count }}</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- System Information Section -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">System Information</h2>
+                <ul class="space-y-2">
+                    <li class="flex justify-between">
+                        <span class="text-gray-600">Platform:</span>
+                        <span class="font-semibold">{{ system_information.platform }}</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span class="text-gray-600">Machine:</span>
+                        <span class="font-semibold">{{ system_information.machine }}</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span class="text-gray-600">Python Version:</span>
+                        <span class="font-semibold">{{ system_information.python_version }}</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span class="text-gray-600">System Uptime (hours):</span>
+                        <span class="font-semibold">{{ system_information.system_uptime_hours }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Disk Information Section -->
+        <div class="mt-6">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Disk Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for disk in system_health.disk_info %}
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">{{ disk.device }}</h3>
+                    <ul class="space-y-2">
+                        <li class="flex justify-between">
+                            <span class="text-gray-600">Mount Point:</span>
+                            <span class="font-semibold">{{ disk.mountpoint }}</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span class="text-gray-600">File System:</span>
+                            <span class="font-semibold">{{ disk.fstype }}</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span class="text-gray-600">Total Space:</span>
+                            <span class="font-semibold">{{ disk.total }}</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span class="text-gray-600">Used Space:</span>
+                            <span class="font-semibold">{{ disk.used }}</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span class="text-gray-600">Free Space:</span>
+                            <span class="font-semibold">{{ disk.free }}</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span class="text-gray-600">Usage:</span>
+                            <span class="font-semibold">{{ disk.percent }}%</span>
+                        </li>
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
