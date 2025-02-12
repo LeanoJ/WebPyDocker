@@ -1,33 +1,29 @@
-FROM python:slim as python
+FROM python:3.11-slim
 
-# Set the working directory
+# Install system dependencies required for psutil
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    gcc \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
+# Set working directory
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
+# TODO: Fix the following error when running the docker container
+# Copy and install requirements
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /app
+# Copy application
+COPY ./app .
 
-# Install any needed packages specified in requirements.txt
+# Expose port
+EXPOSE 5000
 
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+# Set Flask environment variables
+ENV FLASK_APP=main.py \
+    PYTHONUNBUFFERED=1
 
-# Make port 80 available to the world outside this container
-
-EXPOSE 80
-
-# Define environment variable
-
-ENV NAME World
-
-# Run app.py when the container launches
-
+# Start application
 CMD ["python", "main.py"]
-
-# Build the image
-
-# docker build -t webpydocker .
-
-# Run the image
-
-# docker run -p 4000:80 webpydocker
